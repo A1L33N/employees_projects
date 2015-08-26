@@ -31,12 +31,7 @@ post("/projects") do
 end
 
 get("/employees/:id") do
-  @employee = Employee.find(params.fetch("id").to_i())
-  if @employee.project_id
-    @project = Project.find(@employee.project_id)
-  else
-    @project = nil
-  end
+  @employee = Employee.find(params.fetch('id').to_i)
   @projects = Project.all
   erb(:employee)
 end
@@ -48,15 +43,19 @@ get("/projects/:id") do
 end
 
 patch("/employees/:id") do
-  project_id = params.fetch("project_id").to_i()
-  @employee = Employee.find(params.fetch("id").to_i())
-  @employee.update({:project_id => project_id})
+  employee_id = params.fetch('id').to_i
+  @employee = Employee.find(employee_id)
+  project_ids = params.fetch('project_ids')
+  @employee.update({:project_ids => project_ids})
+  @projects = Project.all
   redirect back
 end
 
 patch("/projects/:id") do
-  employee = Employee.find(params.fetch("employee_id").to_i())
-  @project = Project.find(params.fetch("id").to_i())
-  @project.employees.push(employee)
+  project_id = params.fetch('id').to_i
+  @project = Project.find(project_id)
+  employee_ids = params.fetch('employee_ids')
+  @project.update({:employee_ids => employee_ids})
+  @employees = Employee.all
   redirect back
 end

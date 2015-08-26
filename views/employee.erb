@@ -1,25 +1,35 @@
 <h2>Employee: <%= @employee.name() %></h2>
 <hr>
 
-<% if @project %>
-  <h3> Currently working on: <%= @project.name %> </h3>
+<% if @employee.projects.any? %>
+  <h3>Here are the projects currently assigned to this employee:</h3>
+  <ul>
+    <% @employee.projects.each() do |project_employee| %>
+      <li><%= project_employee.name %></li>
+    <% end %>
+  </ul>
 
 <% else %>
-    <p><strong>Employee has not yet been assigned to a project.</strong></p>
-    <br>
-    <p><a href="/projects">Add a project to the database</a></p>
+
+  <p><strong>There are currently no projects assigned to this employee.</strong></p>
+  <br>
+
 <% end %>
 
-<h4>Assign employee to a project:</h4>
-<form id="update_project_id" action="/employees/<%= @employee.id() %>" method="post">
-  <input name="_method" type="hidden" value="patch">
-  <input type="hidden" name="employee_id" id="employee_id" value="<%= @employee.id() %>">
-  <label for="project_select">Select the Project:  </label>
-    <br>
-  <select id="project_id" name="project_id">
+<p>Add a project to this employee:<p>
+
+  <% if @projects.any?() %>
+  <form action="/employees/<%= @employee.id %>" method="post">
+    <input type="hidden" name="_method" value="patch">
+
     <% @projects.each() do |project| %>
-      <option value="<%= project.id() %>"><%= project.name() %></option>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="project_ids[]" value="<%= project.id() %>"><%= project.name() %>
+        </label>
+      </div>
     <% end %>
-  </select>
+  <% end %>
+
   <button type="submit">Submit</button>
 </form>

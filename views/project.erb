@@ -17,16 +17,19 @@
 <% end %>
 
 <p>Add an employee to this project:<p>
-<form id="add_employee_id" action="/projects/<%= @project.id() %>" method="post">
-  <input name="_method" type="hidden" value="patch">
-  <input type="hidden" name="project_id" id="project_id" value="<%= @project.id() %>">
-  <label for="employee_id">Select an employee:  </label>
-    <br>
-  <select id="employee_id" name="employee_id">
-    <option value=""></option>
+
+  <% if @employees.any?() %>
+  <form action="/projects/<%= @project.id %>" method="post">
+    <input type="hidden" name="_method" value="patch">
+
     <% @employees.each() do |employee| %>
-      <option value="<%= employee.id() %>"><%= employee.name() %></option>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="employee_ids[]" value="<%= employee.id() %>"><%= employee.name() %>
+        </label>
+      </div>
     <% end %>
-  </select>
+  <% end %>
+
   <button type="submit">Submit</button>
 </form>

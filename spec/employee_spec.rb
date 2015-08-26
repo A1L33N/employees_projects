@@ -1,9 +1,11 @@
 require("spec_helper")
 
 describe(Employee) do
-  it("belongs to a project") do
-    test_project = Project.create({:name => "Very important project"})
-    test_employee1 = Employee.create({:name => "Pilar Martinez", :project_id => test_project.id})
-    expect(test_project.employees()).to(eq([test_employee1]))
+  it("belongs to many projects") do
+    test_employee1 = Employee.create({:name => "Pilar Martinez"})
+    test_project1 = test_employee1.projects.create({:name =>"Ender Wiggins"})
+    test_project2 = test_employee1.projects.create({:name =>"Spartan Project"})
+
+    expect(test_employee1.projects()).to(eq([test_project1, test_project2]))
   end
 end
